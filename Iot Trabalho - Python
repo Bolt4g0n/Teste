@@ -1,0 +1,47 @@
+from flask import Flask, render_template, request
+
+app = Flask(_name_)
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+
+    sistema_ativo = False
+    valor_ldr = 0
+    estado_lampada = "Desligada"
+    nivel_luz = ""
+    led_status = ""
+
+    if request.method == "POST":
+
+        sistema_ativo = request.form.get("sistema") == "on"
+        valor_ldr = int(request.form.get("ldr"))
+
+        if sistema_ativo:
+
+            if valor_ldr <= 1500:
+                nivel_luz = "Ambiente Escuro"
+                estado_lampada = "Ligada"
+                led_status = "LED Baixo Ativado"
+
+            elif valor_ldr <= 3000:
+                nivel_luz = "Luminosidade Média"
+                estado_lampada = "Desligada"
+                led_status = "LED Médio Ativado"
+
+            else:
+                nivel_luz = "Ambiente Claro"
+                estado_lampada = "Desligada"
+                led_status = "LED Alto Ativado"
+
+        else:
+            nivel_luz = "Sistema Desligado"
+
+    return render_template("index.html",
+                           sistema_ativo=sistema_ativo,
+                           valor_ldr=valor_ldr,
+                           estado_lampada=estado_lampada,
+                           nivel_luz=nivel_luz,
+                           led_status=led_status)
+
+if _name_ == "_main_":
+    app.run(debug=True)
