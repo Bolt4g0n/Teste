@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Controle de Luminosidade IoT</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1f1f1f, #2c3e50);
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 40px;
+            padding: 30px;
+            border-radius: 15px;
+            background-color: #2b2b2b;
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        input[type="range"] {
+            width: 80%;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .lampada {
+            font-size: 60px;
+            margin: 20px;
+            filter: grayscale(1);
+            transition: 0.3s;
+        }
+
+        .lampada.on {
+            filter: grayscale(0) drop-shadow(0 0 20px yellow);
+        }
+
+        .led {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 5px;
+            background-color: #444;
+        }
+
+        .baixo { background-color: red; }
+        .medio { background-color: yellow; }
+        .alto { background-color: green; }
+
+        .status-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1c1c1c;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Sistema de Controle de Luminosidade</h1>
+
+    <form method="POST">
+        
+        <label>
+            <input type="checkbox" name="sistema" {% if sistema_ativo %}checked{% endif %}>
+            Ativar Sistema
+        </label>
+
+        <br><br>
+
+        <label>Valor do Sensor LDR (0 - 4095)</label><br>
+        <input type="range" name="ldr" min="0" max="4095"
+               value="{{ valor_ldr }}"
+               oninput="this.nextElementSibling.value = this.value">
+        <output>{{ valor_ldr }}</output>
+
+        <br><br>
+
+        <button type="submit">Atualizar</button>
+
+    </form>
+
+    <div class="status-box">
+        <h2>Status do Sistema</h2>
+
+        <div class="lampada {% if estado_lampada == 'Ligada' %}on{% endif %}">
+            💡
+        </div>
+
+        <p><strong>Nível de Luz:</strong> {{ nivel_luz }}</p>
+        <p><strong>Lâmpada:</strong> {{ estado_lampada }}</p>
+        <p><strong>Indicador:</strong> {{ led_status }}</p>
+
+        <div>
+            <span class="led {% if 'Baixo' in led_status %}baixo{% endif %}"></span> Baixo
+            <span class="led {% if 'Médio' in led_status %}medio{% endif %}"></span> Médio
+            <span class="led {% if 'Alto' in led_status %}alto{% endif %}"></span> Alto
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
